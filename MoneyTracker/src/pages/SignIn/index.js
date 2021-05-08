@@ -1,19 +1,22 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
+import { Button, Gap, Header, TextInput } from '../../components'
 import firebase from '../../config/Firebase';
 import {showMessage} from 'react-native-flash-message';
-
-import { Button, Gap, Header, TextInput } from '../../components'
 
 const SignIn = ({navigation}) =>{
     const [email, setEmail] = useState ('');
     const [password, setPassword] = useState ('');
 
     const onSubmit = () => {
-        firebase
+      firebase
         .auth()
-        .signInUserWithEmailAndPassword(email, password)
-        .then(res => navigation.navigate('Home'))
+        .signInWithEmailAndPassword(email, password)
+        .then(res => {
+          navigation.navigate('Home', {
+            uid: res.user.uid,
+            });
+        })
         .catch(error => 
             showMessage({
                 message: error.message,
